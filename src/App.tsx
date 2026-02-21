@@ -9,6 +9,8 @@ function App() {
   const [readStatus, setReadStatus] = useState<Status>('checking');
   const [writeStatus, setWriteStatus] = useState<Status>('checking');
   const [tables, setTables] = useState<string[]>([]);
+  const [missingTables, setMissingTables] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     checkDatabase();
@@ -32,7 +34,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full">
+      <div className="max-w-3xl w-full">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
             <div className="flex items-center gap-3 mb-2">
@@ -87,6 +89,16 @@ function App() {
                     </div>
                   ))}
                 </div>
+
+                {missingTables.length > 0 && (
+                  <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                    <p className="text-sm text-amber-900 flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4" />
+                      Missing expected tables: {missingTables.join(', ')}
+                    </p>
+                  </div>
+                )}
+
                 <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                   <p className="text-sm text-green-800">
                     <strong>Database is working!</strong> Read and write checks passed.
@@ -96,12 +108,24 @@ function App() {
             )}
 
             {dbStatus === 'error' && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg space-y-2">
                 <p className="text-sm text-red-800">
                   Failed to connect to NeonDB. Ensure <code>VITE_DATABASE_URL</code> is set correctly.
                 </p>
+                {errorMessage && (
+                  <p className="text-xs text-red-700 break-all">
+                    <strong>Error:</strong> {errorMessage}
+                  </p>
+                )}
               </div>
             )}
+
+            <button
+              onClick={checkDatabase}
+              className="mt-6 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+            >
+              Re-check Database
+            </button>
           </div>
         </div>
       </div>
