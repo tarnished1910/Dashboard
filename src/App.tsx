@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { runDashboardHealthCheck } from './lib/neon';
+import { Database, Server, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
+
+type Status = 'checking' | 'connected' | 'error';
 import { Database, Server, CheckCircle2, XCircle } from 'lucide-react';
 
 type Status = 'checking' | 'connected' | 'error';
@@ -17,6 +20,19 @@ function App() {
   }, []);
 
   async function checkDatabase() {
+    setDbStatus('checking');
+    setReadStatus('checking');
+    setWriteStatus('checking');
+
+    const health = await runDashboardHealthCheck();
+
+    setTables(health.tables);
+    setMissingTables(health.missingTables);
+    setErrorMessage(health.errorMessage ?? '');
+
+    setReadStatus(health.readOk ? 'connected' : 'error');
+    setWriteStatus(health.writeOk ? 'connected' : 'error');
+    setDbStatus(health.readOk && health.writeOk ? 'connected' : 'error');
     try {
       const health = await runDashboardHealthCheck();
 
@@ -65,6 +81,23 @@ function App() {
             <div className="grid grid-cols-2 gap-3 mb-6">
               <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                 <p className="text-sm text-slate-500">Read check</p>
+                <p className="font-medium text-slate-900">
+                  {readStatus === 'connected'
+                    ? 'Pass'
+                    : readStatus === 'error'
+                      ? 'Fail'
+                      : 'Checking...'}
+                </p>
+              </div>
+              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <p className="text-sm text-slate-500">Write check</p>
+                <p className="font-medium text-slate-900">
+                  {writeStatus === 'connected'
+                    ? 'Pass'
+                    : writeStatus === 'error'
+                      ? 'Fail'
+                      : 'Checking...'}
+                </p>
                 <p className="font-medium text-slate-900">{readStatus === 'connected' ? 'Pass' : readStatus === 'error' ? 'Fail' : 'Checking...'}</p>
               </div>
               <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
@@ -110,6 +143,8 @@ function App() {
             {dbStatus === 'error' && (
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg space-y-2">
                 <p className="text-sm text-red-800">
+                  Failed to connect to NeonDB. Ensure <code>VITE_DATABASE_URL</code> or{' '}
+                  <code>DATABASE_URL</code> is set correctly.
                   Failed to connect to NeonDB. Ensure <code>VITE_DATABASE_URL</code> is set correctly.
                 </p>
                 {errorMessage && (
