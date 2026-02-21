@@ -1,11 +1,4 @@
-type SqlRow = Record<string, unknown>;
-
-type NeonModule = {
-  neon: (connectionString: string) => (
-    strings: TemplateStringsArray,
-    ...params: unknown[]
-  ) => Promise<SqlRow[]>;
-};
+import { neon } from '@neondatabase/serverless';
 
 export type DashboardHealth = {
   readOk: boolean;
@@ -27,33 +20,8 @@ const expectedTables = [
 ];
 
 function getDatabaseUrl() {
-  return import.meta.env.VITE_DATABASE_URL || import.meta.env.DATABASE_URL;
-}
-
-async function getNeonSql(databaseUrl: string) {
-  const neonModule = (await import(
-    /* @vite-ignore */ 'https://esm.sh/@neondatabase/serverless@1.0.1'
-  )) as NeonModule;
-const databaseUrl = import.meta.env.VITE_DATABASE_URL;
-
-if (!databaseUrl) {
-  throw new Error('Missing VITE_DATABASE_URL environment variable');
-}
-
-type SqlRow = Record<string, unknown>;
-
-type DashboardHealth = {
-  readOk: boolean;
-  writeOk: boolean;
-  tables: string[];
-};
-
-async function getNeonSql() {
-  const neonModule = await import(
-    /* @vite-ignore */ 'https://esm.sh/@neondatabase/serverless@1.0.1'
-  );
-
-  return neonModule.neon(databaseUrl);
+  // DATABASE_URL is no longer exposed via envPrefix; use VITE_DATABASE_URL only.
+  return import.meta.env.VITE_DATABASE_URL;
 }
 
 export async function runDashboardHealthCheck(): Promise<DashboardHealth> {
@@ -66,19 +34,19 @@ export async function runDashboardHealthCheck(): Promise<DashboardHealth> {
       tables: [],
       missingTables: expectedTables,
       errorMessage:
-        'Missing database URL. Set VITE_DATABASE_URL (recommended) or DATABASE_URL before running the dashboard.',
+        'Missing database URL. Set VITE_DATABASE_URL in your .env file before running the dashboard.',
     };
   }
 
   try {
-    const sql = await getNeonSql(databaseUrl);
+    const sql = neon(databaseUrl);
 
-    const tableRows = (await sql`
+    const tableRows = await sql`
       SELECT table_name
       FROM information_schema.tables
       WHERE table_schema = 'public'
       ORDER BY table_name
-    `) as SqlRow[];
+    `;
 
     const tables = tableRows
       .map((row) => String(row.table_name ?? ''))
@@ -86,12 +54,21 @@ export async function runDashboardHealthCheck(): Promise<DashboardHealth> {
 
     const missingTables = expectedTables.filter((table) => !tables.includes(table));
 
-    const readRows = (await sql`SELECT NOW() AS current_time`) as SqlRow[];
+    const readRows = await sql`SELECT NOW() AS current_time`;
     const readOk = readRows.length === 1;
 
-    await sql`CREATE TEMP TABLE IF NOT EXISTS dashboard_write_test (id integer)`;
-    await sql`INSERT INTO dashboard_write_test (id) VALUES (1)`;
-    await sql`DELETE FROM dashboard_write_test WHERE id = 1`;
+    // BUG FIX: NeonDB's HTTP driver sends each sql`...` call as a separate HTTP
+    // request — TEMP TABLEs created in one call are not visible in the next.
+    // Using a single DO block keeps everything in one round-trip so session
+    // state (the temp table) is maintained for the duration of the block.
+    await sql`
+      DO $$
+      BEGIN
+        CREATE TEMP TABLE IF NOT EXISTS _dashboard_write_test (id integer);
+        INSERT INTO _dashboard_write_test (id) VALUES (1);
+        DELETE FROM _dashboard_write_test WHERE id = 1;
+      END $$
+    `;
 
     return {
       readOk,
@@ -109,30 +86,4 @@ export async function runDashboardHealthCheck(): Promise<DashboardHealth> {
       errorMessage: message,
     };
   }
-  const sql = await getNeonSql();
-
-  const tableRows = (await sql`
-    SELECT table_name
-    FROM information_schema.tables
-    WHERE table_schema = 'public'
-    ORDER BY table_name
-  `) as SqlRow[];
-
-  const tables = tableRows
-    .map((row) => String(row.table_name ?? ''))
-    .filter(Boolean);
-
-  const readRows = (await sql`SELECT NOW() AS current_time`) as SqlRow[];
-  const readOk = readRows.length === 1;
-
-  await sql`CREATE TEMP TABLE IF NOT EXISTS dashboard_write_test (id integer)`;
-  await sql`INSERT INTO dashboard_write_test (id) VALUES (1)`;
-  await sql`TRUNCATE dashboard_write_test`;
-  const writeOk = true;
-
-  return {
-    readOk,
-    writeOk,
-    tables,
-  };
 }

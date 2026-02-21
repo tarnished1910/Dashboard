@@ -535,86 +535,86 @@ ALTER TABLE warns_data ENABLE ROW LEVEL SECURITY;
 ALTER TABLE warn_data ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS Policies (allowing authenticated access for now - should be customized per use case)
-CREATE POLICY "Allow authenticated read access" ON guild_settings FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON guild_settings FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON guild_settings FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON guild_settings FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON role_permissions FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON role_permissions FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON role_permissions FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON role_permissions FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON command_cooldowns FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON command_cooldowns FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON command_cooldowns FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON command_cooldowns FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON message_templates FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON message_templates FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON message_templates FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON message_templates FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON reaction_roles FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON reaction_roles FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON reaction_roles FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON reaction_roles FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON button_roles FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON button_roles FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON button_roles FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON button_roles FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON custom_commands FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON custom_commands FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON custom_commands FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON custom_commands FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON auto_responders FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON auto_responders FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON auto_responders FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON auto_responders FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON ticket_panels FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON ticket_panels FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON ticket_panels FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON ticket_panels FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON tickets FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON tickets FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON tickets FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON tickets FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON audit_logs FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON audit_logs FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON audit_logs FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON audit_logs FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON guild_members FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON guild_members FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON guild_members FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON guild_members FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON level_rewards FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON level_rewards FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON level_rewards FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON level_rewards FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON info_topics FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON info_topics FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON info_topics FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON info_topics FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON blacklist_data FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON blacklist_data FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON blacklist_data FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON blacklist_data FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON votes FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON votes FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON votes FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON votes FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON votes_cast FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON votes_cast FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON votes_cast FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON votes_cast FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON scanner_data FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON scanner_data FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON scanner_data FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON scanner_data FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON triggers FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON triggers FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON triggers FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON triggers FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON channels FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON channels FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON channels FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON channels FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON embeds FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON embeds FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON embeds FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON embeds FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON guild_config FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON guild_config FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON guild_config FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON guild_config FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON messages FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON messages FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON messages FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON messages FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON mod_actions FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON mod_actions FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON mod_actions FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON mod_actions FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON pending_actions FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON pending_actions FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON pending_actions FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON pending_actions FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON trust_scores FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON trust_scores FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON trust_scores FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON trust_scores FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON warns_data FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON warns_data FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON warns_data FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON warns_data FOR ALL TO PUBLIC USING (true);
 
-CREATE POLICY "Allow authenticated read access" ON warn_data FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Allow authenticated write access" ON warn_data FOR ALL TO authenticated USING (true);
+CREATE POLICY "Allow authenticated read access" ON warn_data FOR SELECT TO PUBLIC USING (true);
+CREATE POLICY "Allow authenticated write access" ON warn_data FOR ALL TO PUBLIC USING (true);

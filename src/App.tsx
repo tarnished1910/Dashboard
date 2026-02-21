@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
-import { runDashboardHealthCheck } from './lib/neon';
 import { Database, Server, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
-
-type Status = 'checking' | 'connected' | 'error';
-import { Database, Server, CheckCircle2, XCircle } from 'lucide-react';
+import { runDashboardHealthCheck } from './lib/neon';
 
 type Status = 'checking' | 'connected' | 'error';
 
@@ -16,7 +13,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    checkDatabase();
+    void checkDatabase();
   }, []);
 
   async function checkDatabase() {
@@ -29,23 +26,9 @@ function App() {
     setTables(health.tables);
     setMissingTables(health.missingTables);
     setErrorMessage(health.errorMessage ?? '');
-
     setReadStatus(health.readOk ? 'connected' : 'error');
     setWriteStatus(health.writeOk ? 'connected' : 'error');
     setDbStatus(health.readOk && health.writeOk ? 'connected' : 'error');
-    try {
-      const health = await runDashboardHealthCheck();
-
-      setTables(health.tables);
-      setReadStatus(health.readOk ? 'connected' : 'error');
-      setWriteStatus(health.writeOk ? 'connected' : 'error');
-      setDbStatus(health.readOk && health.writeOk ? 'connected' : 'error');
-    } catch (err) {
-      console.error('Database check failed:', err);
-      setDbStatus('error');
-      setReadStatus('error');
-      setWriteStatus('error');
-    }
   }
 
   return (
@@ -82,27 +65,14 @@ function App() {
               <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                 <p className="text-sm text-slate-500">Read check</p>
                 <p className="font-medium text-slate-900">
-                  {readStatus === 'connected'
-                    ? 'Pass'
-                    : readStatus === 'error'
-                      ? 'Fail'
-                      : 'Checking...'}
+                  {readStatus === 'connected' ? 'Pass' : readStatus === 'error' ? 'Fail' : 'Checking...'}
                 </p>
               </div>
               <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
                 <p className="text-sm text-slate-500">Write check</p>
                 <p className="font-medium text-slate-900">
-                  {writeStatus === 'connected'
-                    ? 'Pass'
-                    : writeStatus === 'error'
-                      ? 'Fail'
-                      : 'Checking...'}
+                  {writeStatus === 'connected' ? 'Pass' : writeStatus === 'error' ? 'Fail' : 'Checking...'}
                 </p>
-                <p className="font-medium text-slate-900">{readStatus === 'connected' ? 'Pass' : readStatus === 'error' ? 'Fail' : 'Checking...'}</p>
-              </div>
-              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                <p className="text-sm text-slate-500">Write check</p>
-                <p className="font-medium text-slate-900">{writeStatus === 'connected' ? 'Pass' : writeStatus === 'error' ? 'Fail' : 'Checking...'}</p>
               </div>
             </div>
 
@@ -145,7 +115,6 @@ function App() {
                 <p className="text-sm text-red-800">
                   Failed to connect to NeonDB. Ensure <code>VITE_DATABASE_URL</code> or{' '}
                   <code>DATABASE_URL</code> is set correctly.
-                  Failed to connect to NeonDB. Ensure <code>VITE_DATABASE_URL</code> is set correctly.
                 </p>
                 {errorMessage && (
                   <p className="text-xs text-red-700 break-all">
@@ -156,7 +125,7 @@ function App() {
             )}
 
             <button
-              onClick={checkDatabase}
+              onClick={() => void checkDatabase()}
               className="mt-6 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
             >
               Re-check Database
